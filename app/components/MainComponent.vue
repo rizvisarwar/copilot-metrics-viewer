@@ -71,6 +71,7 @@
         <v-window-item v-for="item in tabItems" :key="item" :value="item">
           <v-card flat>
             <MetricsViewer v-if="item === getDisplayTabName(itemName)" :metrics="metrics" :date-range-description="dateRangeDescription" />
+            <AvgUsersPerWeekViewer v-if="item === getDisplayTabName(itemName)" :metrics="metrics" :date-range-description="dateRangeDescription" />
             <TeamsComponent v-if="item === 'teams'" :date-range-description="dateRangeDescription" :date-range="dateRange" />
             <BreakdownComponent
 v-if="item === 'languages'" :metrics="metrics" :breakdown-key="'language'"
@@ -113,6 +114,7 @@ import TeamsComponent from './TeamsComponent.vue'
 import ApiResponse from './ApiResponse.vue'
 import AgentModeViewer from './AgentModeViewer.vue'
 import DateRangeSelector from './DateRangeSelector.vue'
+import AvgUsersPerWeekViewer from './AvgUsersPerWeekViewer.vue'
 import { Options } from '@/model/Options';
 import { useRoute } from 'vue-router';
 
@@ -126,7 +128,8 @@ export default defineNuxtComponent({
     TeamsComponent,
     ApiResponse,
     AgentModeViewer,
-    DateRangeSelector
+    DateRangeSelector,
+    AvgUsersPerWeekViewer
   },
   methods: {
     logout() {
