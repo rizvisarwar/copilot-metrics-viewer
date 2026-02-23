@@ -22,13 +22,6 @@
           @update:model-value="updateDateRange"
         />
       </v-col>
-      <v-col cols="6" sm="2">
-        <v-checkbox
-          v-model="excludeHolidays"
-          label="Exclude holidays from metrics"
-          density="compact"
-        />
-      </v-col>
       <v-col cols="6" sm="4" class="d-flex align-center justify-start" style="padding-bottom: 35px;">
         <v-btn
           color="primary"
@@ -87,8 +80,6 @@ const defaultFromDate = new Date(today.getTime() - 27 * 24 * 60 * 60 * 1000) // 
 
 const fromDate = ref(formatDate(defaultFromDate))
 const toDate = ref(formatDate(today))
-const excludeHolidays = ref(false)
-
 
 function formatDate(date: Date): string {
   return date.toISOString().split('T')[0] || ''
@@ -106,14 +97,13 @@ const dateRangeText = computed(() => {
   const from = parseDate(fromDate.value)
   const to = parseDate(toDate.value)
   const diffDays = Math.ceil((to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24)) + 1
-  const withoutHolidays = excludeHolidays.value ? ' (excluding holidays/weekends)' : ''
 
   if (diffDays === 1) {
-    return `For ${from.toLocaleDateString()}${withoutHolidays}`
+    return `For ${from.toLocaleDateString()}`
   } else if (diffDays <= 28 && isLast28Days()) {
-    return `Over the last 28 days ${withoutHolidays}`
+    return `Over the last 28 days`
   } else {
-    return `From ${from.toLocaleDateString()} to ${to.toLocaleDateString()} (${diffDays} days)${withoutHolidays}`
+    return `From ${from.toLocaleDateString()} to ${to.toLocaleDateString()} (${diffDays} days)`
   }
 })
 
@@ -165,7 +155,6 @@ function applyDateRange() {
     since: fromDate.value,
     until: toDate.value,
     description: dateRangeText.value,
-    excludeHolidays: excludeHolidays.value,
   })
 }
 

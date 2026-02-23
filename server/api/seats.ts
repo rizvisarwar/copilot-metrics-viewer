@@ -89,6 +89,13 @@ export default defineEventHandler(async (event) => {
   const logger = console;
   const query = getQuery(event);
   const options = Options.fromQuery(query);
+  const config = useRuntimeConfig();
+
+  if (config.public.githubOrg) {
+    options.githubOrg = config.public.githubOrg;
+    options.githubEnt = undefined;
+    options.scope = options.githubTeam ? 'team-organization' : 'organization';
+  }
 
   const apiUrl = options.getSeatsApiUrl();
   const mockedDataPath = options.getSeatsMockDataPath();

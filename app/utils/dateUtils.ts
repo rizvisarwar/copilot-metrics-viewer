@@ -22,9 +22,6 @@ export function filterHolidaysFromMetrics(data: CopilotMetrics[], excludeHoliday
 
 export function isHoliday(date: Date, locale: string): boolean {
     try {
-        if (isWeekend(date)) {
-            return true; // Treat weekends as holidays
-        }
         const holidays = new Holidays(locale);
         const result = holidays.isHoliday(date);
         // holidays.isHoliday returns false for no holiday, or an array for holidays

@@ -73,6 +73,13 @@ export async function getMetricsData(event: H3Event<EventHandlerRequest>): Promi
   const logger = console;
   const query = getQuery(event);
   const options = Options.fromQuery(query);
+  const config = useRuntimeConfig(event);
+
+  if (config.public.githubOrg) {
+    options.githubOrg = config.public.githubOrg;
+    options.githubEnt = undefined;
+    options.scope = options.githubTeam ? 'team-organization' : 'organization';
+  }
 
   // Extract locale from headers if not provided in query
   if (!options.locale) {

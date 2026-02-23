@@ -54,6 +54,12 @@ export async function getTeams(event: H3Event<EventHandlerRequest>): Promise<Tea
     if (!options.githubOrg && config.public.githubOrg) options.githubOrg = config.public.githubOrg
     if (!options.githubEnt && config.public.githubEnt) options.githubEnt = config.public.githubEnt
 
+    if (config.public.githubOrg) {
+        options.githubOrg = config.public.githubOrg
+        options.githubEnt = undefined
+        options.scope = options.githubTeam ? 'team-organization' : 'organization'
+    }
+
     if (options.isDataMocked) {
         logger.info('Using mocked data for teams')
         const teams: Team[] = [
