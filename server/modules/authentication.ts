@@ -1,4 +1,4 @@
-import type { H3Event, EventHandlerRequest } from 'h3'
+import { createError, type H3Event, type EventHandlerRequest } from 'h3'
 
 // https://www.telerik.com/blogs/implementing-sso-vue-nuxt-auth-github-comprehensive-guide
 
@@ -46,13 +46,16 @@ export async function authenticateAndGetGitHubHeaders(event: H3Event<EventHandle
 
 function buildHeaders(token: string): Headers {
     if (!token) {
-        throw new Error(
-            `Authentication required but not provided.
+        throw createError({
+            statusCode: 401,
+            statusMessage: 'Unauthorized',
+            message: `Authentication required but not provided.
             This can happen when:
             1. First call to the API when client checks if user is authenticated - /api/_auth/session.
             2. When App is not configured correctly:
              - For PAT, set NUXT_GITHUB_TOKEN environment variable.
-             - For GitHub Auth - ensure NUXT_PUBLIC_USING_GITHUB_AUTH is set to true, NUXT_OAUTH_GITHUB_CLIENT_ID and NUXT_OAUTH_GITHUB_CLIENT_SECRET are provided and user is authenticated.`);
+             - For GitHub Auth - ensure NUXT_PUBLIC_USING_GITHUB_AUTH is set to true, NUXT_OAUTH_GITHUB_CLIENT_ID and NUXT_OAUTH_GITHUB_CLIENT_SECRET are provided and user is authenticated.`
+        });
     }
 
     return new Headers({
